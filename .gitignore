@@ -1,0 +1,7 @@
+DesignTimeBuild
+bin
+obj
+packages
+
+*.suo
+*.user

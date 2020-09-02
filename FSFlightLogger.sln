@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSFlightLogger", "FSFlightLogger\FSFlightLogger.csproj", "{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimConnectUnitTests", "SimConnectUnitTests\SimConnectUnitTests.csproj", "{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSFlightLoggerCmd", "FSFlightLoggerCmd\FSFlightLoggerCmd.csproj", "{767C7EAA-9230-4DEE-89FA-9699288C831B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightLoggerLib", "FlightLoggerLib\FlightLoggerLib.csproj", "{D85BCC97-F653-4286-98D9-073A33A55857}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimConnect", "SimConnect\SimConnect.csproj", "{F160BB6A-7620-41E5-A99C-948C208875E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Debug|x64.ActiveCfg = Debug|x64
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Debug|x64.Build.0 = Debug|x64
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Debug|x86.ActiveCfg = Debug|x86
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Debug|x86.Build.0 = Debug|x86
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Release|x64.ActiveCfg = Release|x64
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Release|x64.Build.0 = Release|x64
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Release|x86.ActiveCfg = Release|x86
+		{5871FA9B-88A7-4F98-8755-2FC48D4DBF44}.Release|x86.Build.0 = Release|x86
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Debug|x64.ActiveCfg = Debug|x64
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Debug|x64.Build.0 = Debug|x64
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Debug|x86.ActiveCfg = Debug|x86
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Debug|x86.Build.0 = Debug|x86
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Release|x64.ActiveCfg = Release|x64
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Release|x64.Build.0 = Release|x64
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Release|x86.ActiveCfg = Release|x86
+		{2CD97D07-EF26-4CDA-A090-DF3D698E7F60}.Release|x86.Build.0 = Release|x86
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Debug|x64.ActiveCfg = Debug|x64
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Debug|x64.Build.0 = Debug|x64
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Debug|x86.ActiveCfg = Debug|x86
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Debug|x86.Build.0 = Debug|x86
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Release|x64.ActiveCfg = Release|x64
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Release|x64.Build.0 = Release|x64
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Release|x86.ActiveCfg = Release|x86
+		{767C7EAA-9230-4DEE-89FA-9699288C831B}.Release|x86.Build.0 = Release|x86
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Debug|x64.ActiveCfg = Debug|x64
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Debug|x64.Build.0 = Debug|x64
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Debug|x86.ActiveCfg = Debug|x86
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Debug|x86.Build.0 = Debug|x86
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Release|x64.ActiveCfg = Release|x64
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Release|x64.Build.0 = Release|x64
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Release|x86.ActiveCfg = Release|x86
+		{D85BCC97-F653-4286-98D9-073A33A55857}.Release|x86.Build.0 = Release|x86
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Debug|x64.ActiveCfg = Debug|x64
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Debug|x64.Build.0 = Debug|x64
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Debug|x86.ActiveCfg = Debug|x86
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Debug|x86.Build.0 = Debug|x86
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Release|x64.ActiveCfg = Release|x64
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Release|x64.Build.0 = Release|x64
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Release|x86.ActiveCfg = Release|x86
+		{F160BB6A-7620-41E5-A99C-948C208875E4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {427083A8-FC16-46A5-9DD7-FB805B89A26A}
+	EndGlobalSection
+EndGlobal
