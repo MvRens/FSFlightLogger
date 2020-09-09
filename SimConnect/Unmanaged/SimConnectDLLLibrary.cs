@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SimConnect.Lib;
 
 #pragma warning disable 1591
 namespace SimConnect.Unmanaged
 {
-    public class SimConnectDLLLibrary : ISimConnectLibrary, IDisposable
+    public class SimConnectDLLLibrary : ISimConnectLibrary, IAsyncDisposable
     {
         private delegate uint SimConnectOpenProc(out IntPtr phSimConnect, string szName, IntPtr hwnd, uint userEventWin32, IntPtr hEventHandle, uint configIndex);
         private delegate uint SimConnectCloseProc(IntPtr hSimConnect);
@@ -12,6 +13,9 @@ namespace SimConnect.Unmanaged
         private delegate uint SimConnectClearDataDefinitionProc(IntPtr hSimConnect, uint defineID);
         private delegate uint SimConnectRequestDataOnSimObjectProc(IntPtr hSimConnect, uint requestID, uint defineID, uint objectID, SimConnectPeriod period, uint flags, uint origin = 0, uint interval = 0, uint limit = 0);
         private delegate uint SimConnectGetNextDispatchProc(IntPtr hSimConnect, out IntPtr ppData, out uint pcbData);
+        private delegate uint SimConnectSubscribeToSystemEventProc(IntPtr hSimConnect, uint eventID, string systemEventName);
+        private delegate uint SimConnectUnsubscribeFromSystemEventProc(IntPtr hSimConnect, uint eventID);
+
 
         private readonly UnmanagedLibrary library;
 
@@ -21,6 +25,8 @@ namespace SimConnect.Unmanaged
         private readonly SimConnectClearDataDefinitionProc simConnectClearDataDefinition;
         private readonly SimConnectRequestDataOnSimObjectProc simConnectRequestDataOnSimObject;
         private readonly SimConnectGetNextDispatchProc simConnectGetNextDispatch;
+        private readonly SimConnectSubscribeToSystemEventProc simConnectSubscribeToSystemEvent;
+        private readonly SimConnectUnsubscribeFromSystemEventProc simConnectUnsubscribeFromSystemEvent;
 
 
 
@@ -33,11 +39,14 @@ namespace SimConnect.Unmanaged
             simConnectClearDataDefinition = library.GetUnmanagedFunction<SimConnectClearDataDefinitionProc>("SimConnect_ClearDataDefinition");
             simConnectRequestDataOnSimObject = library.GetUnmanagedFunction<SimConnectRequestDataOnSimObjectProc>("SimConnect_RequestDataOnSimObject");
             simConnectGetNextDispatch = library.GetUnmanagedFunction<SimConnectGetNextDispatchProc>("SimConnect_GetNextDispatch");
+            simConnectSubscribeToSystemEvent = library.GetUnmanagedFunction<SimConnectSubscribeToSystemEventProc>("SimConnect_SubscribeToSystemEvent");
+            simConnectUnsubscribeFromSystemEvent = library.GetUnmanagedFunction<SimConnectUnsubscribeFromSystemEventProc>("SimConnect_UnsubscribeFromSystemEvent");
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
             library?.Dispose();
+            return default;
         }
 
 
@@ -71,6 +80,17 @@ namespace SimConnect.Unmanaged
         public uint SimConnect_GetNextDispatch(IntPtr hSimConnect, out IntPtr ppData, out uint pcbData)
         {
             return simConnectGetNextDispatch(hSimConnect, out ppData, out pcbData);
+        }
+
+
+        public uint SimConnect_SubscribeToSystemEvent(IntPtr hSimConnect, uint eventID, string systemEventName)
+        {
+            return simConnectSubscribeToSystemEvent(hSimConnect, eventID, systemEventName);
+        }
+
+        public uint SimConnect_UnsubscribeFromSystemEvent(IntPtr hSimConnect, uint eventID)
+        {
+            return simConnectUnsubscribeFromSystemEvent(hSimConnect, eventID);
         }
     }
 }

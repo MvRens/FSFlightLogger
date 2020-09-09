@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SharpKml.Base;
 using SharpKml.Dom;
@@ -9,11 +8,12 @@ namespace FlightLoggerLib.Concrete
 {
     public class KMLFlightLogger : IFlightLogger
     {
-        private readonly string filename;
+        private readonly string path;
+        private string filename;
         private readonly System.TimeSpan flushInterval;
-        private readonly Document output;
-        private readonly Folder rootFolder;
-        private readonly LineString positionPath;
+        private Document output;
+        private Folder rootFolder;
+        private LineString positionPath;
         
         private DateTime lastFlush = DateTime.MinValue;
         private Vector lastPosition;
@@ -23,10 +23,73 @@ namespace FlightLoggerLib.Concrete
 
         public KMLFlightLogger(string path, System.TimeSpan flushInterval)
         {
-            var dateString = DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss");
-            filename = Path.Combine(path, dateString + ".kml");
+            this.path = path;
             this.flushInterval = flushInterval;
+        }
 
+
+        public async Task NewLog()
+        {
+            if (output == null)
+                return;
+
+            CheckEndPoint();
+            await Flush();
+            output = null;
+        }
+
+
+        public async ValueTask DisposeAsync()
+        {
+            if (output == null)
+                return;
+
+            CheckEndPoint();
+            await Flush();
+        }
+
+
+        protected void CheckEndPoint()
+        {
+            // TODO replace last "full stop" point if they match
+            if (lastPosition != null)
+            {
+                AddPoint(lastPosition, "End", "end");
+                lastPosition = null;
+            }
+        }
+
+        protected async Task AutoFlush()
+        {
+            var now = DateTime.Now;
+            var diff = now - lastFlush;
+
+            if (diff < flushInterval)
+                return;
+
+            await Flush();
+            lastFlush = now;
+        }
+
+        protected async Task Flush()
+        {
+            var serializer = new Serializer();
+            serializer.Serialize(output);
+
+            using (var writer = new StreamWriter(filename))
+            {
+                await writer.WriteAsync(serializer.Xml);
+            }
+        }
+
+
+        protected void EnsureOutput(DateTime eventTime)
+        {
+            if (output != null)
+                return;
+
+            var dateString = eventTime.ToString("yyyy-MM-dd HH.mm.ss");
+            filename = Path.Combine(path, dateString + ".kml");
 
             // Create folder
             rootFolder = new Folder
@@ -63,38 +126,6 @@ namespace FlightLoggerLib.Concrete
             AddIconStyleMap("fullstop", 1.1, "http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png", null, paddleHotspot);
 
             output.AddFeature(rootFolder);
-        }
-
-        public void Dispose()
-        {
-            if (lastPosition != null)
-                AddPoint(lastPosition, "End", "end");
-
-            Flush().Wait();
-        }
-
-
-        protected async Task AutoFlush()
-        {
-            var now = DateTime.Now;
-            var diff = now - lastFlush;
-
-            if (diff < flushInterval)
-                return;
-
-            await Flush();
-            lastFlush = now;
-        }
-
-        protected async Task Flush()
-        {
-            var serializer = new Serializer();
-            serializer.Serialize(output);
-
-            using (var writer = new StreamWriter(filename))
-            {
-                await writer.WriteAsync(serializer.Xml);
-            }
         }
 
 
@@ -185,6 +216,8 @@ namespace FlightLoggerLib.Concrete
 
         public async Task LogPosition(DateTime eventTime, FlightPosition position)
         {
+            EnsureOutput(eventTime);
+
             var altitudeMeters = position.Altitude * MetersPerFoot;
             var coordinate = new Vector(position.Latitude, position.Longitude, altitudeMeters);
 

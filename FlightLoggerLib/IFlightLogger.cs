@@ -13,8 +13,9 @@ namespace FlightLoggerLib
 
 
 
-    public interface IFlightLogger : IDisposable
+    public interface IFlightLogger : IAsyncDisposable
     {
+        Task NewLog();
         Task LogPosition(DateTime eventTime, FlightPosition position);
         //void LogEvent
     }

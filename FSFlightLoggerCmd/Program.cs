@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
@@ -15,6 +16,7 @@ using SimConnect.Lib;
 namespace FSFlightLoggerCmd
 {
     // TODO verb for converting CSV to KML
+    // TODO with the introduction of the GUI and SimConnectLogger, either port to SimConnectLogger for a single code base or remove this project
 
 
     public class PositionData
@@ -115,7 +117,7 @@ namespace FSFlightLoggerCmd
             };
 
 
-            client.AddDefinition<PositionData>(data =>
+            client.AddDefinition<PositionData>(async data =>
             {
                 // TODO take vertical position into account when going straight up or down (not a common use case, but still)
                 var distanceMeters = LatLon.DistanceBetweenInMeters(lastData.Latitude, lastData.Longitude, data.Latitude, data.Longitude);
@@ -140,14 +142,14 @@ namespace FSFlightLoggerCmd
                 lastData = data;
 
                 // ReSharper disable once AccessToDisposedClosure - covered by disposing the client first
-                loggers.ForEach(logger =>
+                await Task.WhenAll(loggers.Select(logger =>
                     logger.LogPosition(now, new FlightPosition
                     {
                         Latitude = data.Latitude,
                         Longitude = data.Longitude,
                         Altitude = data.Altitude,
                         Airspeed = data.Airspeed
-                    }));
+                    })));
             });
 
 
@@ -163,8 +165,8 @@ namespace FSFlightLoggerCmd
             stopEvent.Wait(Timeout.Infinite);
 
             Console.WriteLine("Closing...");
-            client.Dispose();
-            loggers.ForEach(logger => logger.Dispose());
+            client.DisposeAsync();
+            loggers.ForEach(logger => logger.DisposeAsync());
 
             if (!Debugger.IsAttached) 
                 return;

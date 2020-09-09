@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using SimConnect;
 using SimConnect.Concrete;
 using SimpleInjector;
-using SimpleInjector.Diagnostics;
 
 namespace FSFlightLogger
 {

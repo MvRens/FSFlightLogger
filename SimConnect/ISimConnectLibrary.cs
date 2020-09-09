@@ -129,6 +129,17 @@ namespace SimConnect
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
+    public struct SimConnectRecvEvent
+    {
+        public SimConnectRecv Recv;
+
+        public uint uGroupID;
+        public uint uEventID;
+        public uint dwData;
+    }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct SimConnectRecvSimobjectData
     {
         public SimConnectRecv Recv;
@@ -148,7 +159,7 @@ namespace SimConnect
     /// <summary>
     /// Provides a low-level interface to a compatible SimConnect.dll.
     /// </summary>
-    public interface ISimConnectLibrary : IDisposable
+    public interface ISimConnectLibrary : IAsyncDisposable
     {
         uint SimConnect_Open(out IntPtr phSimConnect, string szName, IntPtr hwnd, uint userEventWin32, IntPtr hEventHandle, uint configIndex);
         uint SimConnect_Close(IntPtr hSimConnect);
@@ -158,6 +169,9 @@ namespace SimConnect
 
         uint SimConnect_RequestDataOnSimObject(IntPtr hSimConnect, uint requestID, uint defineID, uint objectID, SimConnectPeriod period, uint flags, uint origin = 0, uint interval = 0, uint limit = 0);
         uint SimConnect_GetNextDispatch(IntPtr hSimConnect, out IntPtr ppData, out uint pcbData);
+
+        uint SimConnect_SubscribeToSystemEvent(IntPtr hSimConnect, uint eventID, string systemEventName);
+        uint SimConnect_UnsubscribeFromSystemEvent(IntPtr hSimConnect, uint eventID);
     }
 
 

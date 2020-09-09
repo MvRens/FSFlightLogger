@@ -11,25 +11,30 @@ namespace FlightLoggerLib.Concrete
 {
     public class CSVFlightLogger : IFlightLogger
     {
-        private readonly CsvWriter output;
+        private readonly string path;
+        private CsvWriter output;
 
 
         public CSVFlightLogger(string path)
         {
-            var filename = Path.Combine(path, DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + ".csv");
-            var header = !File.Exists(filename);
-
-            output = new CsvWriter(new StreamWriter(filename, true), new CsvConfiguration(CultureInfo.CurrentCulture)
-            {
-                SanitizeForInjection = false,
-                HasHeaderRecord = header
-            });
+            this.path = path;
         }
 
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            output?.Dispose();
+            if (output != null)
+                await output.DisposeAsync();
+        }
+
+
+        public async Task NewLog()
+        {
+            if (output != null)
+            {
+                await output.DisposeAsync();
+                output = null;
+            }
         }
 
 
@@ -43,6 +48,18 @@ namespace FlightLoggerLib.Concrete
                 Altitude = position.Altitude,
                 Airspeed = position.Airspeed
             };
+
+            if (output == null)
+            {
+                var filename = Path.Combine(path, eventTime.ToString("yyyy-MM-dd HH.mm.ss") + ".csv");
+                var header = !File.Exists(filename);
+
+                output = new CsvWriter(new StreamWriter(filename, true), new CsvConfiguration(CultureInfo.CurrentCulture)
+                {
+                    SanitizeForInjection = false,
+                    HasHeaderRecord = header
+                });
+            }
 
             await output.WriteRecordsAsync(Enumerable.Repeat(record, 1));
             await output.FlushAsync();
